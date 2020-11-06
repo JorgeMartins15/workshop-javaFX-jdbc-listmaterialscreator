@@ -30,7 +30,7 @@ public class MainViewController implements Initializable{
 	
 	@FXML
 	public void onMenuItemMachineAction() {
-		System.out.println("onMenuItemMachineAction");
+		loadView("/gui/MachineList.fxml");
 	}
 	
 	@FXML
