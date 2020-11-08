@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.MachineServices;
 
 public class MainViewController implements Initializable{
 	
@@ -30,7 +31,7 @@ public class MainViewController implements Initializable{
 	
 	@FXML
 	public void onMenuItemMachineAction() {
-		loadView("/gui/MachineList.fxml");
+		loadView2("/gui/MachineList.fxml");
 	}
 	
 	@FXML
@@ -60,6 +61,30 @@ public class MainViewController implements Initializable{
 			mainVBox.getChildren().clear();
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVBox.getChildren());
+			
+		}
+		catch(IOException e ){
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+			
+		}
+	}
+	
+	private void loadView2 (String absoluteName) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			VBox newVBox = loader.load();
+			
+			Scene mainScene = Main.getMainScene();
+			VBox mainVBox = (VBox)((ScrollPane)mainScene.getRoot()).getContent();
+			
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(newVBox.getChildren());
+			
+			MachineListController controller = loader.getController();
+			controller.setMachineService(new MachineServices());
+			controller.updateTableView();
 			
 		}
 		catch(IOException e ){
