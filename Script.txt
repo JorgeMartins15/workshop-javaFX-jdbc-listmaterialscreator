@@ -1,0 +1,51 @@
+CREATE TABLE machine (
+
+  Id int(11) NOT NULL AUTO_INCREMENT,
+
+  Name varchar(60) DEFAULT NULL,
+
+  Type varchar(60) DEFAULT NULL,
+
+  PRIMARY KEY (Id)
+
+);
+
+
+
+CREATE TABLE components (
+
+  Id int(11) NOT NULL AUTO_INCREMENT,
+
+  Quantity int(11) NOT NULL,
+
+  Description varchar(100) NOT NULL,
+
+  Code varchar(12) NOT NULL,
+
+  Provider1 varchar(60) NOT NULL,
+
+  Provider2 varchar(60) NOT NULL,
+
+  MachineId int(11) NOT NULL,
+
+  PRIMARY KEY (Id),
+
+  FOREIGN KEY (MachineId) REFERENCES machine (Id)
+
+);
+
+
+
+INSERT INTO machine (Name, Type) VALUES 
+
+  ('GS300', 'Empacotadora'),
+
+  ('GS300SD', 'Empacotadora');
+
+
+
+INSERT INTO components (Quantity, Description, Code, Provider1, Provider2, MachineId) VALUES 
+
+  (1,'CLP','010.010.0100','Delta','Rockwell',1 ),
+
+  (2,'Inversor','010.010.0101','Delta','Rockwell',2 );

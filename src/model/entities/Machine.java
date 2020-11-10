@@ -4,7 +4,7 @@ public class Machine {
 	private Integer machineId;
 	private String name;
 	private String type;
-
+	
 	public Machine() {
 
 	}
@@ -82,4 +82,5 @@ public class Machine {
 		return "Machine [machineId=" + machineId + ", name=" + name + ", type=" + type + "]";
 	}
 
+	
 }
