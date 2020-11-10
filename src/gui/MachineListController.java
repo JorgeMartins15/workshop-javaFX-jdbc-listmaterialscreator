@@ -43,7 +43,7 @@ public class MachineListController implements Initializable {
 		System.out.println("onBtNewAction");
 	}
 	
-	public void setMachineService(MachineServices service) {
+	public void MachineServices(MachineServices service) {
 		this.service = service;
 	}
 	
