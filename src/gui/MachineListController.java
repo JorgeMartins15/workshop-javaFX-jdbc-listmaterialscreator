@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entities.Machine;
 import model.services.MachineService;
 
-public class MachineListController implements Initializable {
+public class MachineListController implements Initializable, DataChangeListener {
 
 	private MachineService service;
 	
@@ -90,6 +91,7 @@ public class MachineListController implements Initializable {
 			MachineFormController controller = loader.getController();
 			controller.setMachine(obj);
 			controller.setMachineService(new MachineService());
+		    controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
@@ -106,5 +108,10 @@ public class MachineListController implements Initializable {
 			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onDataChanged() {
+		updateTableView();
 	}
 }
