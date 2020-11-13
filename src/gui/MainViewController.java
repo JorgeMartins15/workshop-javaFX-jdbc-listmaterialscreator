@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import model.services.MachineServices;
 
 public class MainViewController implements Initializable{
@@ -28,7 +29,7 @@ public class MainViewController implements Initializable{
 	
 	@FXML
 	private MenuItem menuItemAbout;
-	
+
 	@FXML
 	public void onMenuItemMachineAction() {
 		loadView("/gui/MachineList.fxml", (MachineListController controller) -> {

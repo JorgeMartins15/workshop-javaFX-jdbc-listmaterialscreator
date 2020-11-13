@@ -50,7 +50,8 @@ public class MachineListController implements Initializable {
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/MachineForm.fxml", parentStage);
+		Machine obj = new Machine();
+		createDialogForm(obj,"/gui/MachineForm.fxml", parentStage);
 	}
 	
 	public void MachineServices(MachineServices service) {
@@ -81,10 +82,14 @@ public class MachineListController implements Initializable {
 	}
 
 	
-	private void createDialogForm( String absoluteName, Stage parentStage) {
+	private void createDialogForm(Machine obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			MachineFormController controller = loader.getController();
+			controller.setMachine(obj);
+			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter Machine data");

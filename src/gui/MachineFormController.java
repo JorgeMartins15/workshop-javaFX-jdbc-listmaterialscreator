@@ -9,8 +9,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.entities.Machine;
 
 public class MachineFormController implements Initializable{
+	
+	private Machine entity;
 	
 	@FXML
 	private TextField txtId;
@@ -33,6 +36,10 @@ public class MachineFormController implements Initializable{
 	@FXML
 	private Button btCancel;
 	
+	public void setMachine(Machine entity) {
+		this.entity = entity;
+	}
+	
 	@FXML
 	public void onBtSaveAction() {
 		System.out.println("onBtSaveAction");
@@ -52,6 +59,15 @@ public class MachineFormController implements Initializable{
 		Constraints.setTextFieldInteger(txtId);
 		Constraints.setTextFieldMaxLength(txtName, 30);
 		Constraints.setTextFieldMaxLength(txtType, 20);
+	}
+	
+	public void updateFormData() {
+		if (entity == null) {
+			throw new IllegalStateException("Entity was null");
+		}
+		txtId.setText(String.valueOf(entity.getMachineId()));
+		txtName.setText(entity.getName());
+		txtType.setText(entity.getType());
 	}
 
 }
