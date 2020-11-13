@@ -24,11 +24,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Machine;
-import model.services.MachineServices;
+import model.services.MachineService;
 
 public class MachineListController implements Initializable {
 
-	private MachineServices service;
+	private MachineService service;
 	
 	@FXML
 	private TableView<Machine> tableViewMachine;
@@ -54,7 +54,7 @@ public class MachineListController implements Initializable {
 		createDialogForm(obj,"/gui/MachineForm.fxml", parentStage);
 	}
 	
-	public void MachineServices(MachineServices service) {
+	public void MachineService(MachineService service) {
 		this.service = service;
 	}
 	
@@ -89,6 +89,7 @@ public class MachineListController implements Initializable {
 			
 			MachineFormController controller = loader.getController();
 			controller.setMachine(obj);
+			controller.setMachineService(new MachineService());
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
