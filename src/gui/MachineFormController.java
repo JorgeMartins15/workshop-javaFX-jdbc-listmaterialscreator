@@ -100,10 +100,12 @@ public class MachineFormController implements Initializable{
 		ValidationException exception = new ValidationException("Validation Error");
 		
 		obj.setMachineId(Utils.tryParseToInt(txtId.getText()));
+		
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addError("name", "Field can't be empty");
 		}
-		obj.setName(txtType.getText());
+		obj.setName(txtName.getText());
+		
 		if (txtType.getText() == null || txtType.getText().trim().equals("")) {
 			exception.addError("type", "Field can't be empty");
 		}
