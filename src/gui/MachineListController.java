@@ -9,6 +9,7 @@ import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,35 +32,38 @@ import model.services.MachineService;
 public class MachineListController implements Initializable, DataChangeListener {
 
 	private MachineService service;
-	
+
 	@FXML
 	private TableView<Machine> tableViewMachine;
-	
+
 	@FXML
 	private TableColumn<Machine, Integer> tableColumnId;
-	
+
 	@FXML
 	private TableColumn<Machine, String> tableColumnName;
-	
+
 	@FXML
 	private TableColumn<Machine, String> tableColumnType;
-	
+
+	@FXML
+	private TableColumn<Machine, Machine> tableColumnEDIT;
+
 	@FXML
 	private Button btNew;
-	
+
 	private ObservableList<Machine> obsList;
-	
+
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		Machine obj = new Machine();
-		createDialogForm(obj,"/gui/MachineForm.fxml", parentStage);
+		createDialogForm(obj, "/gui/MachineForm.fxml", parentStage);
 	}
-	
+
 	public void MachineService(MachineService service) {
 		this.service = service;
 	}
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializedNodes();
@@ -68,11 +73,11 @@ public class MachineListController implements Initializable, DataChangeListener 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("machineId"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		tableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-		
+
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewMachine.prefHeightProperty().bind(stage.heightProperty());
 	}
-	
+
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service was null");
@@ -80,18 +85,18 @@ public class MachineListController implements Initializable, DataChangeListener 
 		List<Machine> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewMachine.setItems(obsList);
+		initEditButtons();
 	}
 
-	
 	private void createDialogForm(Machine obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			MachineFormController controller = loader.getController();
 			controller.setMachine(obj);
 			controller.setMachineService(new MachineService());
-		    controller.subscribeDataChangeListener(this);
+			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
@@ -114,4 +119,26 @@ public class MachineListController implements Initializable, DataChangeListener 
 	public void onDataChanged() {
 		updateTableView();
 	}
+
+	private void initEditButtons() {
+		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEDIT.setCellFactory(param -> new TableCell<Machine, Machine>() {
+			private final Button button = new Button("edit");
+
+			@Override
+			protected void updateItem(Machine obj, boolean empty) {
+				super.updateItem(obj, empty);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+
+				setGraphic(button);
+				button.setOnAction(
+						event -> createDialogForm(obj, "/gui/MachineForm.fxml", Utils.currentStage(event)));
+			}
+		});
+	}
+
 }
