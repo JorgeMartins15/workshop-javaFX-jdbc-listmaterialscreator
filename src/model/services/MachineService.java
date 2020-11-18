@@ -25,4 +25,8 @@ public class MachineService {
 			dao.update(obj);
 		}
 	}
+	
+	public void remove (Machine obj) {
+		dao.deleteById(obj.getMachineId());
+	}
 }
