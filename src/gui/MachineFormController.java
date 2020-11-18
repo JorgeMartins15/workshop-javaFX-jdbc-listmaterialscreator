@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Machine;
+import model.exceptions.ValidationException;
 import model.services.MachineService;
 
 public class MachineFormController implements Initializable{
@@ -76,6 +79,10 @@ public class MachineFormController implements Initializable{
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		}
+		catch (ValidationException e) {
+			setErrorMessages(e.getErrors());
+		}
+		
 		catch (DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -90,9 +97,21 @@ public class MachineFormController implements Initializable{
 	
 	private Machine getFormData() {
 		Machine obj = new Machine();
+		ValidationException exception = new ValidationException("Validation Error");
+		
 		obj.setMachineId(Utils.tryParseToInt(txtId.getText()));
-		obj.setName(txtName.getText());
+		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
+			exception.addError("name", "Field can't be empty");
+		}
+		obj.setName(txtType.getText());
+		if (txtType.getText() == null || txtType.getText().trim().equals("")) {
+			exception.addError("type", "Field can't be empty");
+		}
 		obj.setType(txtType.getText());
+		
+		if (exception.getErrors().size() > 0) {
+			throw exception;
+		}
 		
 		return obj;
 	}
@@ -120,6 +139,18 @@ public class MachineFormController implements Initializable{
 		txtId.setText(String.valueOf(entity.getMachineId()));
 		txtName.setText(entity.getName());
 		txtType.setText(entity.getType());
+	}
+	
+	private void setErrorMessages (Map<String, String> errors) {
+		Set<String> fields = errors.keySet();
+		
+		if (fields.contains("name")) {
+			labelErrorName.setText(errors.get("name"));
+		}
+		
+		if (fields.contains("type")) {
+			labelErrorType.setText(errors.get("type"));
+		}
 	}
 
 }
