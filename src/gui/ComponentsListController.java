@@ -31,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Components;
 import model.services.ComponentsService;
+import model.services.MachineService;
 
 public class ComponentsListController implements Initializable, DataChangeListener {
 
@@ -114,7 +115,8 @@ public class ComponentsListController implements Initializable, DataChangeListen
 
 			ComponentsFormController controller = loader.getController();
 			controller.setComponents(obj);
-			controller.setComponentsService(new ComponentsService());
+			controller.setServices(new ComponentsService(), new MachineService());
+			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
