@@ -158,6 +158,8 @@ public class ComponentsFormController implements Initializable {
 			exception.addError("provider2", "Field can't be empty");
 		}
 		obj.setProvider2(txtProvider2.getText());
+		
+		obj.setMachine(comboBoxMachine.getValue());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;
@@ -217,26 +219,13 @@ public class ComponentsFormController implements Initializable {
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
-		if (fields.contains("quantity")) {
-			labelErrorQuantity.setText(errors.get("quantity"));
-		}
-
-		if (fields.contains("description")) {
-			labelErrorDescription.setText(errors.get("description"));
-		}
-
-		if (fields.contains("code")) {
-			labelErrorCode.setText(errors.get("code"));
-		}
-
-		if (fields.contains("provider1")) {
-			labelErrorProvider1.setText(errors.get("provider1"));
-		}
-
-		if (fields.contains("provider2")) {
-			labelErrorProvider2.setText(errors.get("provider2"));
-		}
-
+	
+		labelErrorQuantity.setText((fields.contains("quantity") ? errors.get("quantity") : ""));
+		labelErrorDescription.setText((fields.contains("description") ? errors.get("description") : ""));
+		labelErrorCode.setText((fields.contains("code") ? errors.get("code") : ""));
+		labelErrorProvider1.setText((fields.contains("provider1") ? errors.get("provider1") : ""));
+		labelErrorProvider2.setText((fields.contains("provider2") ? errors.get("provider2") : ""));
+		
 	}
 
 	private void initializeComboBoxMachine() {
